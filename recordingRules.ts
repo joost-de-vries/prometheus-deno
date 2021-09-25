@@ -1,13 +1,9 @@
 import { latencyQuery, throughputQuery, writeYaml, recordingPrometheusRule, ranges, percentiles } from "./recording.ts"
 
 export const apps = [
-  "orca",
-  "chk",
-  "sor",
-  "sora",
-  "soraloader",
-  "exe",
-  "basket",
+  "abcService",
+  "defService",
+  "xyzService",
 ]
 
 export const latencyQueries = [
