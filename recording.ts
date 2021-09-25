@@ -1,15 +1,13 @@
-import type { PrometheusRule, RecordingRule, Group, Labels } from './common.ts'
+import type { KubernetesPrometheusRules , PrometheusRule, RecordingRule, Group, Labels } from './common.ts'
 //import YAML from "https://esm.sh/yaml?dev"
 //import YAML from "https://deno.land/x/yaml@v2.0.0-8/src/index.ts"
 import {
-	
-  parse as yamlParse,
-
-  parseAll as yamlParseAll,
-
   stringify as yamlStringify,
   EXTENDED_SCHEMA
-
+} from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
+export {
+  stringify as yamlStringify,
+  EXTENDED_SCHEMA
 } from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
 
 type Percentile =
@@ -84,14 +82,26 @@ export function recordingPrometheusRule(
   ranges: Range[],
   percentiles: Percentile[],
   apps: string[],
-): PrometheusRule  {
+): KubernetesPrometheusRules  {
   return {
     kind: "Prometheus/Rule",
     name: `${prometheusName}-prometheus-rules-${groupName}`,
     spec: {
       prometheus: `prometheus-${prometheusName}`,
-      groups: [...group(groupName, queries, ranges, percentiles, apps)],
+      ...prometheusRuleFor(groupName, queries, ranges, percentiles, apps),
     }
+  }
+}
+
+export function prometheusRuleFor(
+  groupName: GroupName,
+  queries: Query[],
+  ranges: Range[],
+  percentiles: Percentile[],
+  apps: string[],
+): PrometheusRule {
+  return {
+    groups: [...group(groupName, queries, ranges, percentiles, apps)]
   }
 }
 
@@ -131,13 +141,8 @@ function* rule(
   return
 }
 
-export async function writeYaml(fileName: string, rule: PrometheusRule) {
+export async function writeYaml(fileName: string, rule: Record<string, unknown>) {
   const yaml = yamlStringify(rule, {schema: EXTENDED_SCHEMA})
   await Deno.writeTextFile(fileName, yaml)
   console.log(`${fileName} written`)
 }
-// export async function writeYaml(fileName: string, rules: PrometheusRule[]) {
-//   const yaml = YAML.stringify(rule)
-//   await Deno.writeTextFile(fileName, yaml)
-//   console.log(`${fileName} written`)
-// }

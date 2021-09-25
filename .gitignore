@@ -1,5 +1,6 @@
 recording.yaml
 latencyRecording.yaml
 throughputRecording.yaml
+validRule.yaml
 recordingRules
 writeRecordingRules

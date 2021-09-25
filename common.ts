@@ -7,13 +7,17 @@ export type RecordingRule = {
   labels?: Labels
 }
 
-export type PrometheusRule = {
+export type KubernetesPrometheusRules = {
   kind: string;
   name: string;
   spec: {
-    prometheus: string;
+    prometheus: string
     groups: Group[]
   }
+}
+// a valid prometheus rule conform https://json.schemastore.org/prometheus.rules.json
+export type PrometheusRule = {
+  groups: Group[]
 }
 
 export type Group = {

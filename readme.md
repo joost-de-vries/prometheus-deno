@@ -8,6 +8,4 @@ Run with
 Compile with 
 `deno compile -A recordingRules.ts`
 
-Annotate yaml with
-`# yaml-language-server: $schema=https://json.schemastore.org/prometheus.rules.json
-` to have the file validated against the schema.
+Open the generated file `validRule.yaml`. The yaml plugin will validate it automatically as conforming to https://json.schemastore.org/prometheus.rules.json  

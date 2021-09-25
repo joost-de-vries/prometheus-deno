@@ -1,4 +1,4 @@
-import { latencyQuery, throughputQuery, writeYaml, recordingPrometheusRule, ranges, percentiles } from "./recording.ts"
+import { latencyQuery, throughputQuery, writeYaml, recordingPrometheusRule, prometheusRuleFor, ranges, percentiles, yamlStringify, EXTENDED_SCHEMA } from "./recording.ts"
 
 export const apps = [
   "abcService",
@@ -49,7 +49,12 @@ export const throughputQueries = [
 
 writeYaml("./latencyRecording.yaml", recordingPrometheusRule("checkout", "latency", latencyQueries, ranges, percentiles, apps))
 writeYaml("./throughputRecording.yaml", recordingPrometheusRule("checkout", "throughput", throughputQueries, ranges, percentiles, apps))
-// writeYaml("./recording.yaml", [
-//     recordingPrometheusRule("checkout", "latency", latencyQueries, ranges, percentiles, apps),
-//     recordingPrometheusRule("checkout", "throughput", throughputQueries, ranges, percentiles, apps)]
-//     )
+
+const validRule = prometheusRuleFor("latency", latencyQueries, ranges, percentiles, apps)
+const preamble = `
+# yaml-language-server: $schema=https://json.schemastore.org/prometheus.rules.json
+`
+const validYaml = yamlStringify(validRule, {schema: EXTENDED_SCHEMA})
+const fileName = "./validRule.yaml"
+await Deno.writeTextFile(fileName, preamble + validYaml)
+console.log(`${fileName} written`)
