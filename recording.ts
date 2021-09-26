@@ -1,14 +1,6 @@
 import type { KubernetesPrometheusRules , PrometheusRule, RecordingRule, Group, Labels } from './common.ts'
-//import YAML from "https://esm.sh/yaml?dev"
-//import YAML from "https://deno.land/x/yaml@v2.0.0-8/src/index.ts"
-import {
-  stringify as yamlStringify,
-  EXTENDED_SCHEMA
-} from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
-export {
-  stringify as yamlStringify,
-  EXTENDED_SCHEMA
-} from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
+import { stringify as yamlStringify, EXTENDED_SCHEMA } from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
+export { stringify as yamlStringify, EXTENDED_SCHEMA } from 'https://deno.land/std@0.108.0/encoding/yaml.ts'
 
 type Percentile =
   | "90"
@@ -75,6 +67,7 @@ export function throughputQuery(query: BaseQuery): Query {
 }
 
 type GroupName = "latency" | "throughput"
+
 export function recordingPrometheusRule(
   prometheusName: string,
   groupName: GroupName,
